@@ -1764,7 +1764,7 @@ void LoadCar(char* pCar_name, tDriver pDriver, tCar_spec* pCar_spec, int pOwner,
     if (gGroove_funk_offset < 0) {
         FatalError(kFatalError_NoFunkGrooveSlotBunchesLeft);
     }
-    if (strcmp(pCar_name, "STELLA.TXT") == 0) {
+    if (strcmp(pCar_name, "STELLA.TXT") == 0 && !gDisable_electric_blue) {
         pCar_spec->proxy_ray_distance = 6.0f;
     } else {
         pCar_spec->proxy_ray_distance = 0.0f;
@@ -2297,6 +2297,19 @@ void LoadCar(char* pCar_name, tDriver pDriver, tCar_spec* pCar_spec, int pOwner,
     }
     fclose(f);
     fclose(g);
+
+    // Player car effects
+    if (pDriver == eDriver_local_human) {
+        if (gPlayer_electro_bastard) {
+            pCar_spec->proxy_ray_distance = 6.0f;
+        }
+        if (gPlayer_solid_granite) {
+            pCar_spec->collision_mass_multiplier = 50.0f;
+        }
+        if (gPlayer_jelly_suspension) {
+            SetCarSuspGiveAndHeight(pCar_spec, 2.0, 2.0, 0.1, 0.25, 0.25);
+        }
+    }
 
 #if DETHRACE_FIX_BUGS
 #define CHECK_BINDING_INDEX(IDX)                                                                                 \

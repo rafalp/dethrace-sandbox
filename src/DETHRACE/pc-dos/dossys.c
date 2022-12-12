@@ -612,7 +612,7 @@ void Usage(char* pProgpath) {
     OS_Basename(pProgpath, basename);
 
     fprintf(stderr,
-        "Usage: %s [%s] [%s YonFactor] [%s CarSimplificationLevel] [%s SoundDetailLevel] [%s] [%s] [%s] [%s] [%s] [%s]\nWhere YonFactor is between 0 and 1,\nCarSimplificationLevel is a whole number between 0 and %d,\nand SoundDetailLevel is a whole number.\n",
+        "Usage: %s [%s] [%s YonFactor] [%s CarSimplificationLevel] [%s SoundDetailLevel] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s]\nWhere YonFactor is between 0 and 1,\nCarSimplificationLevel is a whole number between 0 and %d,\nand SoundDetailLevel is a whole number.\n",
         basename,
         "-hires",
         "-yon",
@@ -624,6 +624,13 @@ void Usage(char* pProgpath) {
         "-spamfritter",
         "-nocutscenes",
         "-noreplay",
+        "-metric",
+        "-extratime",
+        "-longerpups",
+        "-stellaisdud",
+        "-playeriselectric",
+        "-playerisstoned",
+        "-playerisjelly",
         CAR_MAX_SIMPLIFICATION_LEVEL);
     exit(1);
 }
@@ -666,6 +673,27 @@ int original_main(int pArgc, char** pArgv) {
             gCut_scene_override = 1;
         } else if (strcasecmp(pArgv[i], "-noreplay") == 0) {
             gReplay_override = 1;
+        } else if (strcasecmp(pArgv[i], "-metric") == 0) {
+            gBrits_override = 1;
+            printf("Changing speedometer to KPH\n");
+        } else if (strcasecmp(pArgv[i], "-longerpups") == 0) {
+            gLonger_pups = 1;
+            printf("Doubling the powerups time\n");
+        } else if (strcasecmp(pArgv[i], "-extratime") == 0) {
+            gExtra_time = 1;
+            printf("Overriding initial race time to 60 minutes\n");
+        } else if (strcasecmp(pArgv[i], "-stellaisdud") == 0) {
+            gDisable_electric_blue = 1;
+            printf("Disabling Electro-bastard Ray on Stella's car\n");
+        } else if (strcasecmp(pArgv[i], "-playeriselectric") == 0) {
+            gPlayer_electro_bastard = 1;
+            printf("Granting Electro-bastard Ray to player car\n");
+        } else if (strcasecmp(pArgv[i], "-playerisstoned") == 0) {
+            gPlayer_solid_granite = 1;
+            printf("Granting Solid Granite to player car\n");
+        } else if (strcasecmp(pArgv[i], "-playerisjelly") == 0) {
+            gPlayer_jelly_suspension = 1;
+            printf("Granting Jelly Suspension to player car\n");
         } else {
             Usage(pArgv[0]);
         }

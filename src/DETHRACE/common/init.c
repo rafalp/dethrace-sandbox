@@ -572,7 +572,11 @@ void InitRace() {
     PrintMemoryDump(0, "AFTER LOADING IN COPS");
     SaveShadeTables();
     gCountdown = 7;
-    gTimer = 1000 * gCurrent_race.initial_timer[gProgram_state.skill_level];
+    if (gExtra_time) {
+        gTimer = 1000 * 3600;
+    } else {
+        gTimer = 1000 * gCurrent_race.initial_timer[gProgram_state.skill_level];
+    }
     gLap = 1;
     gTotal_laps = gCurrent_race.total_laps;
     gCheckpoint = 1;

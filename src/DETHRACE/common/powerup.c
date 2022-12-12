@@ -339,6 +339,9 @@ void LoadPowerups() {
             the_powerup->duration = time;
             if (time > 0) {
                 the_powerup->type = ePowerup_timed;
+                if (gLonger_pups) {
+                    the_powerup->duration = the_powerup->duration * 2;
+                }
             } else if (time == 0) {
                 the_powerup->type = ePowerup_whole_race;
             } else {

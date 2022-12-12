@@ -1,38 +1,26 @@
-# Dethrace  
+# Dethrace - sandbox fork
 
 [![Workflow](https://github.com/jeff-1amstudios/dethrace/actions/workflows/workflow.yml/badge.svg)](https://github.com/jeff-1amstudios/dethrace/actions/workflows/workflow.yml)
 [![Twitter](https://badgen.net/badge/icon/twitter?icon=twitter&label)](https://twitter.com/dethrace_labs)
 [![Discord Carmageddon server](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/f5StsuP)
 
- Want to chat? We are in the `#dethrace` channel on the Carmageddon discord server.
+Want to chat? We are in the `#dethrace` channel on the Carmageddon discord server.
 
 Dethrace is an attempt to learn how the 1997 driving/mayhem game [Carmageddon](https://en.wikipedia.org/wiki/Carmageddon) works behind the scenes and rebuild it to run natively on modern systems.
 
-## Progress
-(Follow us on Twitter to get notified of updates!)
 
-#### Last updated October 3 2022
-- 75% of functions implemented
-- Latest screenshot:
+### About the fork
 
-![Screen Shot 2022-08-29 at 8 47 23 PM](https://user-images.githubusercontent.com/78985374/187300801-80b928d0-8c4a-4091-989d-6767ef2a2f67.png)
+This fork adds extra customization to the game through the executable arguments:
 
+- `-metric`: displays car's speed in game in kilometers per hour.
+- `-extratime`: overrides starting time for races to 1 hour.
+- `-longerpups`: doubles the duration of all powerups.
+- `-stellaisdud`: disables built-in electro bastard ray on Stella Stuna's car.
+- `-playeriselectric`: grants electro bastard ray to player's car.
+- `-playerisstoned`: grants solid granite car effect to player's car.
+- `-playerisjelly`: grants jelly suspension effect to player's car.
 
-
-
-## Background
-Watcom debug symbols for an earlier internal build [were discovered](http://1amstudios.com/2014/12/02/carma1-symbols-dumped) named `DETHRSC.SYM` on the [Carmageddon Splat Pack](http://carmageddon.wikia.com/wiki/Carmageddon_Splat_Pack) expansion CD release. The symbols unfortunately did not match any known released executable, meaning they were interesting but not immediately usable to reverse engineer the game.
-
-This is what it looked like from the Watcom debugger - the names of all the methods were present but the code location they were pointing to was junk:
-
-![watcom-debugger](http://1amstudios.com/img/watcom-debugger.jpg)
-
-_CrayzKirk_ from the Carmageddon community picked it up and did a lot of painstaking work manually matching up many functions and data structures in the DOS executable to the debugging symbols.
-
-We are slowly replacing the original assembly code with equivalent C code, function by function.
-
-### Is "dethrace" a typo?
-No, well, I don't think so at least. The original files according to the symbol dump were stored in `c:\DETHRACE`, and the symbol file is called `DETHSRC.SYM`. Maybe they removed the "a" to be compatible with [8.3 filenames](https://en.wikipedia.org/wiki/8.3_filename)?
 
 ## Game content
 

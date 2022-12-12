@@ -289,7 +289,7 @@ void InitialiseCar2(tCar_spec* pCar, int pClear_disabled_flag) {
         pCar->car_model_actors[pCar->current_car_actor].actor->render_style = BR_RSTYLE_NONE;
     }
     SwitchCarActor(pCar, pCar->current_car_actor);
-    if (strcmp(pCar->name, "STELLA.TXT") == 0) {
+    if (strcmp(pCar->name, "STELLA.TXT") == 0 && !gDisable_electric_blue) {
         pCar->proxy_ray_distance = 6.0f;
     } else {
         pCar->proxy_ray_distance = 0.0f;
@@ -407,6 +407,18 @@ void InitialiseCar2(tCar_spec* pCar, int pClear_disabled_flag) {
     if (gNet_mode) {
         for (j = 0; j < 3; ++j) {
             pCar->power_up_levels[j] = 0;
+        }
+    }
+    // Set status flags on player car
+    if (pCar->driver == eDriver_local_human) {
+        if (gPlayer_electro_bastard) {
+            pCar->proxy_ray_distance = 6.0f;
+        }
+        if (gPlayer_solid_granite) {
+            pCar->collision_mass_multiplier = 50.0f;
+        }
+        if (gPlayer_jelly_suspension) {
+            SetCarSuspGiveAndHeight(pCar, 2.0, 2.0, 0.1, 0.25, 0.25);
         }
     }
 }

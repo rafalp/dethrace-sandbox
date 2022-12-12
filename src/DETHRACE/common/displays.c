@@ -1262,6 +1262,10 @@ void DoInstruments(tU32 pThe_time) {
                     speedo_image->height);
             }
         } else if (speedo_image != NULL) {
+            /* Convert speed to Kilomethers per hour for us dirty continentals */
+            if (gBrits_override) {
+                speed_mph = speed_mph * 1.609344f;
+            }
             DrawNumberAt(
                 speedo_image,
                 the_wobble_x + gProgram_state.current_car.speedo_x[gProgram_state.cockpit_on],
