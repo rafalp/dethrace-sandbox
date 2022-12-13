@@ -349,6 +349,7 @@ void LoadPowerups() {
             }
         }
         action_index = GetAnInt(f);
+        the_powerup->action_index = action_index;
         if (action_index >= 0) {
             the_powerup->got_proc = gGot_procs[action_index];
             the_powerup->lose_proc = gLose_procs[action_index];

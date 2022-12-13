@@ -1721,6 +1721,7 @@ typedef struct tPowerup {
     int* integer_params;
     int current_value;
     int prat_cam_event;
+    int action_index;
     tNet_powerup_type net_type;
     tGot_proc* got_proc;
     tLose_proc* lose_proc;

@@ -1960,7 +1960,7 @@ void CheckPedestrianDeathScenario(tPedestrian_data* pPedestrian) {
             FRandomBetween(1000.f * impact_speed, 2000.f * impact_speed),
             FRandomBetween(15.f / impact_speed, 25.f / impact_speed));
     }
-    if (!gRace_finished) {
+    if (!gRace_finished && !gEndless_mode) {
         CheckLastPed();
     }
     pPedestrian->collided_last_time = 1;

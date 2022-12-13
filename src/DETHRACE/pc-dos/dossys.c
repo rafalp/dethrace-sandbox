@@ -612,7 +612,7 @@ void Usage(char* pProgpath) {
     OS_Basename(pProgpath, basename);
 
     fprintf(stderr,
-        "Usage: %s [%s] [%s YonFactor] [%s CarSimplificationLevel] [%s SoundDetailLevel] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s]\nWhere YonFactor is between 0 and 1,\nCarSimplificationLevel is a whole number between 0 and %d,\nand SoundDetailLevel is a whole number.\n",
+        "Usage: %s [%s] [%s YonFactor] [%s CarSimplificationLevel] [%s SoundDetailLevel] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s]\nWhere YonFactor is between 0 and 1,\nCarSimplificationLevel is a whole number between 0 and %d,\nand SoundDetailLevel is a whole number.\n",
         basename,
         "-hires",
         "-yon",
@@ -626,6 +626,9 @@ void Usage(char* pProgpath) {
         "-noreplay",
         "-metric",
         "-extratime",
+        "-endlessmode",
+        "-showpeds",
+        "-showpups",
         "-longerpups",
         "-stellaisdud",
         "-playeriselectric",
@@ -682,6 +685,15 @@ int original_main(int pArgc, char** pArgv) {
         } else if (strcasecmp(pArgv[i], "-extratime") == 0) {
             gExtra_time = 1;
             printf("Overriding initial race time to 60 minutes\n");
+        } else if (strcasecmp(pArgv[i], "-endlessmode") == 0) {
+            gEndless_mode = 1;
+            printf("Race will not end on all opponents or peds killed\n");
+        } else if (strcasecmp(pArgv[i], "-showpeds") == 0) {
+            gShow_peds_mode = 1;
+            printf("Peds will always show on a map\n");
+        } else if (strcasecmp(pArgv[i], "-showpups") == 0) {
+            gShow_pups_mode = 1;
+            printf("Powerups will show on a map\n");
         } else if (strcasecmp(pArgv[i], "-stellaisdud") == 0) {
             gDisable_electric_blue = 1;
             printf("Disabling Electro-bastard Ray on Stella's car\n");

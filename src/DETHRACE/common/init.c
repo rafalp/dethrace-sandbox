@@ -597,6 +597,8 @@ void InitRace() {
     gInstant_handbrake = 0;
     if (gNet_mode) {
         gShow_peds_on_map = gCurrent_net_game->options.show_peds_on_map;
+    } else if (gShow_peds_mode) {
+        gShow_peds_on_map = 1;
     } else {
         gShow_peds_on_map = 0;
     }

@@ -14,6 +14,9 @@ Dethrace is an attempt to learn how the 1997 driving/mayhem game [Carmageddon](h
 This fork adds extra customization to the game through the executable arguments:
 
 - `-metric`: displays car's speed in game in kilometers per hour.
+- `-endlessmode`: race doesn't when peds or opponents are murdered.
+- `-showpeds`: shows peds on map. Also shows ped respawn (white), ped on map (green) and electro bastard ray (blue) pups.
+- `-showpups`: shows all powerups on map (red dots).
 - `-extratime`: overrides starting time for races to 1 hour.
 - `-longerpups`: doubles the duration of all powerups.
 - `-stellaisdud`: disables built-in electro bastard ray on Stella Stuna's car.

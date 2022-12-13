@@ -1261,6 +1261,47 @@ void ProcessLevitate(tOpponent_spec* pOpponent_spec, tProcess_objective_command 
     }
 }
 
+void ProcessRespawn(tOpponent_spec* pOpponent_spec, tProcess_objective_command pCommand) {
+    float t;
+    float terminal_time;
+    float y;
+    LOG_TRACE("(%p, %d)", pOpponent_spec, pCommand);
+
+    if (pCommand == ePOC_start) {
+        dr_dprintf("%s: ProcessRespawn() - new objective started", pOpponent_spec->car_spec->driver_name);
+        pOpponent_spec->levitate_data.waiting_to_levitate = 1;
+        pOpponent_spec->car_spec->brake_force = 15.f * pOpponent_spec->car_spec->M;
+        pOpponent_spec->car_spec->acc_force = 0.f;
+        pOpponent_spec->levitate_data.time_started = gTime_stamp_for_this_munging;
+    } else if (pCommand == ePOC_run) {
+        if (pOpponent_spec->levitate_data.waiting_to_levitate) {
+            if ((BrVector3Length(&pOpponent_spec->car_spec->v) < .01f && BrVector3Length(&pOpponent_spec->car_spec->omega) < 1.f) || gTime_stamp_for_this_munging - pOpponent_spec->levitate_data.time_started > 4000) {
+                pOpponent_spec->levitate_data.waiting_to_levitate = 0;
+                pOpponent_spec->levitate_data.time_started = gTime_stamp_for_this_munging;
+                pOpponent_spec->levitate_data.initial_y = pOpponent_spec->car_spec->car_master_actor->t.t.translate.t.v[1];
+            } else {
+                pOpponent_spec->car_spec->brake_force = 15.f * pOpponent_spec->car_spec->M;
+                pOpponent_spec->car_spec->acc_force = 0.f;
+                BrVector3InvScale(&pOpponent_spec->car_spec->omega, &pOpponent_spec->car_spec->omega,
+                    powf(gFrame_period_for_this_munging / 1000.f, 2.f));
+            }
+        }
+        if (!pOpponent_spec->levitate_data.waiting_to_levitate) {
+            TurnOpponentPhysicsOff(pOpponent_spec);
+            t = (gTime_stamp_for_this_munging - pOpponent_spec->levitate_data.time_started) / 1000.f;
+            if (t < 20.f) {
+                y = .5f * t * t / 2.f;
+            } else {
+                y = 10.f * (t - 20.f) + 100.f;
+            }
+            pOpponent_spec->car_spec->car_master_actor->t.t.translate.t.v[1] = pOpponent_spec->levitate_data.initial_y + y;
+            if (y > 200.f) {
+                pOpponent_spec->finished_for_this_race = 1;
+            }
+        }
+    }
+}
+
 // IDA: void __usercall ProcessGetNearPlayer(tOpponent_spec *pOpponent_spec@<EAX>, tProcess_objective_command pCommand@<EDX>)
 void ProcessGetNearPlayer(tOpponent_spec* pOpponent_spec, tProcess_objective_command pCommand) {
     br_vector3* initial_pos;

@@ -963,6 +963,46 @@ void DrawMapSmallBlip(tU32 pTime, br_vector3* pPos, int pColour) {
     }
 }
 
+// IDA: void __usercall DrawMapSmallBlip(tU32 pTime@<EAX>, br_vector3 *pPos@<EDX>, int pColour@<EBX>)
+void DrawMapCross(tU32 pTime, br_vector3* pPos, int pColour) {
+    br_vector3 map_pos;
+    int offset;
+    tU32 time_diff;
+    LOG_TRACE("(%d, %p, %d)", pTime, pPos, pColour);
+
+    BrMatrix34ApplyP(&map_pos, pPos, &gCurrent_race.map_transformation);
+    if (gReal_graf_data_index != 0) {
+        map_pos.v[0] = 2.f * map_pos.v[0];
+        map_pos.v[1] = 2.f * map_pos.v[1] + 40.f;
+    }
+    offset = (int)map_pos.v[0] + gBack_screen->row_bytes * (int)map_pos.v[1];
+    ((br_uint_8*)gBack_screen->pixels)[offset] = pColour;
+
+    if ((pTime & 0x100) == 0) {
+        ((br_uint_8*)gBack_screen->pixels)[offset - gBack_screen->row_bytes - 1] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset - gBack_screen->row_bytes + 1] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset + gBack_screen->row_bytes - 1] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset + gBack_screen->row_bytes + 1] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset - gBack_screen->row_bytes - 2] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset - gBack_screen->row_bytes + 2] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset + gBack_screen->row_bytes - 2] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset + gBack_screen->row_bytes + 2] = pColour;
+    } else {
+        ((br_uint_8*)gBack_screen->pixels)[offset - gBack_screen->row_bytes] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset + gBack_screen->row_bytes] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset - (gBack_screen->row_bytes * 2)] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset + (gBack_screen->row_bytes * 2)] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset - 1] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset + 1] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset - 2] = pColour;
+        ((br_uint_8*)gBack_screen->pixels)[offset + 2] = pColour;
+    }
+
+    // for (int i = 0; i < 256; i ++) {
+    //     ((br_uint_8*)gBack_screen->pixels)[(gBack_screen->row_bytes * 100) + i] = i;
+    // }
+}
+
 // IDA: void __usercall MungeClipPlane(br_vector3 *pLight@<EAX>, tCar_spec *pCar@<EDX>, br_vector3 *p1@<EBX>, br_vector3 *p2@<ECX>, br_scalar pY_offset)
 void MungeClipPlane(br_vector3* pLight, tCar_spec* pCar, br_vector3* p1, br_vector3* p2, br_scalar pY_offset) {
     br_vector3 v1;
@@ -1474,6 +1514,8 @@ void RenderAFrame(int pDepth_mask_on) {
     int map_timer_x;
     int map_timer_width;
     int ped_type;
+    int pup_index;
+    int pup_action;
     char* old_pixels;
     br_matrix34 old_camera_matrix;
     br_matrix34 old_mirror_cam_matrix;
@@ -1692,8 +1734,24 @@ void RenderAFrame(int pDepth_mask_on) {
                 ped_type = GetPedPosition(i, &pos);
                 if (ped_type > 0 && gShow_peds_on_map) {
                     DrawMapSmallBlip(the_time, &pos, 52);
-                } else if (ped_type < 0 && (gNet_mode != eNet_mode_none && gCurrent_net_game->options.show_powerups_on_map)) {
-                    DrawMapSmallBlip(the_time, &pos, 4);
+                } else if (ped_type < 0 && (gShow_pups_mode || (gNet_mode != eNet_mode_none && gCurrent_net_game->options.show_powerups_on_map))) {
+                    pup_index = gPedestrian_array[i].ref_number - 100;
+                    pup_action = gPowerup_array[pup_index].action_index;
+                    if (pup_action == 29) {  // Peds shown on map
+                        DrawMapSmallBlip(the_time, &pos, 10);
+                    } else {
+                        DrawMapSmallBlip(the_time, &pos, 4);
+                    }
+                } else if (ped_type < 0 && gShow_peds_mode) {
+                    pup_index = gPedestrian_array[i].ref_number - 100;
+                    pup_action = gPowerup_array[pup_index].action_index;
+                    if (pup_action == 25) {  // Peds respawn
+                        DrawMapCross(the_time, &pos, 255);
+                    } else if (pup_action == 29) {  // Peds shown on map
+                        DrawMapCross(the_time, &pos, 84);
+                    } else if (pup_action == 31) {  // Electro Bastard Ray
+                        DrawMapCross(the_time, &pos, 140);
+                    }
                 }
             }
         }

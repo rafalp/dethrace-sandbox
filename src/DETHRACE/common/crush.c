@@ -521,7 +521,9 @@ void KnackerThisCar(tCar_spec* pCar) {
 
     pCar->knackered = 1;
     QueueWastedMassage(pCar->index);
-    CheckLastCar();
+    if (!gEndless_mode) {
+        CheckLastCar();
+    }
     QueueOilSpill(pCar);
     if (gNet_mode == eNet_mode_none) {
         KillGroovadelic(pCar->index);
