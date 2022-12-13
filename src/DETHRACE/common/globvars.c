@@ -26,6 +26,7 @@ int gExtra_time;
 int gEndless_mode;
 int gShow_peds_mode;
 int gShow_pups_mode;
+int gShow_cops_mode;
 int gLonger_pups;
 int gDisable_electric_blue;
 int gPlayer_electro_bastard;

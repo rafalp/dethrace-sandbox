@@ -1737,8 +1737,12 @@ void RenderAFrame(int pDepth_mask_on) {
                 } else if (ped_type < 0 && (gShow_pups_mode || (gNet_mode != eNet_mode_none && gCurrent_net_game->options.show_powerups_on_map))) {
                     pup_index = gPedestrian_array[i].ref_number - 100;
                     pup_action = gPowerup_array[pup_index].action_index;
-                    if (pup_action == 29) {  // Peds shown on map
-                        DrawMapSmallBlip(the_time, &pos, 10);
+                    if (pup_action == 25) {  // Peds respawn
+                        DrawMapCross(the_time, &pos, 255);
+                    } else if (pup_action == 29) {  // Peds shown on map
+                        DrawMapCross(the_time, &pos, 84);
+                    } else if (pup_action == 31) {  // Electro Bastard Ray
+                        DrawMapCross(the_time, &pos, 140);
                     } else {
                         DrawMapSmallBlip(the_time, &pos, 4);
                     }
@@ -1755,7 +1759,9 @@ void RenderAFrame(int pDepth_mask_on) {
                 }
             }
         }
-        if (gShow_opponents) {
+        if (gShow_cops_mode) {
+            cat = eVehicle_rozzer;
+        } else if (gShow_opponents) {
             cat = eVehicle_opponent;
         } else {
             cat = eVehicle_self;

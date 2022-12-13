@@ -17,6 +17,7 @@ This fork adds extra customization to the game through the executable arguments:
 - `-endlessmode`: race doesn't when peds or opponents are murdered.
 - `-showpeds`: shows peds on map. Also shows ped respawn (white), ped on map (green) and electro bastard ray (blue) pups.
 - `-showpups`: shows all powerups on map (red dots).
+- `-showcops`: shows cops on map (blue blimps).
 - `-extratime`: overrides starting time for races to 1 hour.
 - `-longerpups`: doubles the duration of all powerups.
 - `-stellaisdud`: disables built-in electro bastard ray on Stella Stuna's car.

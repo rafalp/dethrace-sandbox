@@ -612,7 +612,7 @@ void Usage(char* pProgpath) {
     OS_Basename(pProgpath, basename);
 
     fprintf(stderr,
-        "Usage: %s [%s] [%s YonFactor] [%s CarSimplificationLevel] [%s SoundDetailLevel] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s]\nWhere YonFactor is between 0 and 1,\nCarSimplificationLevel is a whole number between 0 and %d,\nand SoundDetailLevel is a whole number.\n",
+        "Usage: %s [%s] [%s YonFactor] [%s CarSimplificationLevel] [%s SoundDetailLevel] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s]\nWhere YonFactor is between 0 and 1,\nCarSimplificationLevel is a whole number between 0 and %d,\nand SoundDetailLevel is a whole number.\n",
         basename,
         "-hires",
         "-yon",
@@ -629,6 +629,7 @@ void Usage(char* pProgpath) {
         "-endlessmode",
         "-showpeds",
         "-showpups",
+        "-showcops",
         "-longerpups",
         "-stellaisdud",
         "-playeriselectric",
@@ -694,6 +695,9 @@ int original_main(int pArgc, char** pArgv) {
         } else if (strcasecmp(pArgv[i], "-showpups") == 0) {
             gShow_pups_mode = 1;
             printf("Powerups will show on a map\n");
+        } else if (strcasecmp(pArgv[i], "-showcops") == 0) {
+            gShow_cops_mode = 1;
+            printf("Cops will show on a map\n");
         } else if (strcasecmp(pArgv[i], "-stellaisdud") == 0) {
             gDisable_electric_blue = 1;
             printf("Disabling Electro-bastard Ray on Stella's car\n");
