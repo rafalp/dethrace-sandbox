@@ -1163,6 +1163,8 @@ typedef struct tCar_spec_struct {              // size: 0x1a9c
     tU32 time_to_recover;                      // @0x1a84
     tU32 repair_time;                          // @0x1a88
     int power_up_levels[3];                    // @0x1a8c
+    int horn_siren_on;
+    int horn_siren_toggled;
     tS3_sound_tag horn_sound_tag;              // @0x1a98
 } tCar_spec;
 

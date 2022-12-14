@@ -1303,8 +1303,6 @@ void ProcessRespawn(tOpponent_spec* pOpponent_spec, tProcess_objective_command p
             pOpponent_spec->car_spec->car_master_actor->t.t.translate.t.v[1] = pOpponent_spec->respawn_data.initial_y + y;
 
             if (y > 200.f) {
-                // TeleportOpponentToNearestSafeLocation(pOpponent_spec);
-                // TurnOpponentPhysicsOn(pOpponent_spec);
                 pOpponent_spec->car_spec->knackered = 0;
                 pOpponent_spec->knackeredness_detected = 0;
                 TotallyRepairACar(pOpponent_spec->car_spec);
