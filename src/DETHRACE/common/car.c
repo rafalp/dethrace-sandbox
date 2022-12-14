@@ -420,6 +420,9 @@ void InitialiseCar2(tCar_spec* pCar, int pClear_disabled_flag) {
         if (gPlayer_jelly_suspension) {
             SetCarSuspGiveAndHeight(pCar, 2.0, 2.0, 0.1, 0.25, 0.25);
         }
+        if (gGT_mode) {
+            pCar->grip_multiplier = 3.5f;
+        }
     }
 }
 

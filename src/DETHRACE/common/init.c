@@ -593,8 +593,16 @@ void InitRace() {
     gRace_finished = 0;
     gOpponent_speed_factor = 1.0f;
     gCop_speed_factor = 1.0f;
-    gGravity_multiplier = gDefault_gravity;
-    gPinball_factor = 0;
+    if (gJupiter_mode) {
+        gGravity_multiplier = 5.f;
+    } else {
+        gGravity_multiplier = gDefault_gravity;
+    }
+    if (gPinball_mode) {
+        gPinball_factor = 3.f;
+    } else {
+        gPinball_factor = 0;
+    }
     gInstant_handbrake = 0;
     if (gNet_mode) {
         gShow_peds_on_map = gCurrent_net_game->options.show_peds_on_map;

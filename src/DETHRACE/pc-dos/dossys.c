@@ -612,7 +612,7 @@ void Usage(char* pProgpath) {
     OS_Basename(pProgpath, basename);
 
     fprintf(stderr,
-        "Usage: %s [%s] [%s YonFactor] [%s CarSimplificationLevel] [%s SoundDetailLevel] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s]\nWhere YonFactor is between 0 and 1,\nCarSimplificationLevel is a whole number between 0 and %d,\nand SoundDetailLevel is a whole number.\n",
+        "Usage: %s [%s] [%s YonFactor] [%s CarSimplificationLevel] [%s SoundDetailLevel] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s] [%s]\nWhere YonFactor is between 0 and 1,\nCarSimplificationLevel is a whole number between 0 and %d,\nand SoundDetailLevel is a whole number.\n",
         basename,
         "-hires",
         "-yon",
@@ -627,6 +627,9 @@ void Usage(char* pProgpath) {
         "-metric",
         "-extratime",
         "-endlessmode",
+        "-pinballmode",
+        "-jupitermode",
+        "-gtmode",
         "-showpeds",
         "-showpups",
         "-showcops",
@@ -690,6 +693,15 @@ int original_main(int pArgc, char** pArgv) {
         } else if (strcasecmp(pArgv[i], "-endlessmode") == 0) {
             gEndless_mode = 1;
             printf("Race will not end on all opponents or peds killed\n");
+        } else if (strcasecmp(pArgv[i], "-pinballmode") == 0) {
+            gPinball_mode = 1;
+            printf("Pinball mode is always active\n");
+        } else if (strcasecmp(pArgv[i], "-jupitermode") == 0) {
+            gJupiter_mode = 1;
+            printf("Jovian gravity is always active\n");
+        } else if (strcasecmp(pArgv[i], "-gtmode") == 0) {
+            gGT_mode = 1;
+            printf("Super grip is always active\n");
         } else if (strcasecmp(pArgv[i], "-showpeds") == 0) {
             gShow_peds_mode = 1;
             printf("Peds will always show on a map\n");
