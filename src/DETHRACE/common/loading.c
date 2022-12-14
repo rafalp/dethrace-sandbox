@@ -2244,7 +2244,7 @@ void LoadCar(char* pCar_name, tDriver pDriver, tCar_spec* pCar_spec, int pOwner,
         } else {
             ReadCrushData(f, &pCar_spec->car_model_actors[i].crush_data);
         }
-        if (pCar_spec->driver < eDriver_net_human || gAusterity_mode) {
+        if ((!gOpponent_respawn && pCar_spec->driver < eDriver_net_human) || gAusterity_mode) {
             pCar_spec->car_model_actors[i].undamaged_vertices = NULL;
         } else {
             PossibleService();
