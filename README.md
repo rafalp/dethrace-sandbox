@@ -15,6 +15,7 @@ This fork adds extra customization to the game through the executable arguments:
 
 - `-metric`: displays car's speed in game in kilometers per hour.
 - `-endlessmode`: race doesn't when peds or opponents are murdered.
+- `-pinballmode`: pinball mode is always on.
 - `-jupitermode`: gravity from Jupiter is always on.
 - `-gtmode`: grip-o-matic tires are always on.
 - `-showpeds`: shows peds on map. Also shows ped respawn (white), ped on map (green) and electro bastard ray (blue) pups.
