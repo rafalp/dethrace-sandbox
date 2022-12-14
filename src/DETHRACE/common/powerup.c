@@ -209,9 +209,26 @@ int GotPowerupX(tCar_spec* pCar, int pIndex, int pTell_net_players, int pDisplay
         return -1;
     }
     the_powerup = &gPowerup_array[pIndex];
+
+    if (the_powerup->action_index == 16 && gJupiter_mode) {
+        return -1;
+    }
+    if (the_powerup->action_index == 20 && gPlayer_jelly_suspension) {
+        return -1;
+    }
+    if (the_powerup->action_index == 21 && gGT_mode) {
+        return -1;
+    }
+    if (the_powerup->action_index == 27 && gPlayer_solid_granite) {
+        return -1;
+    }
+    if (the_powerup->action_index == 31 && gPlayer_electro_bastard) {
+        return -1;
+    }
     if (the_powerup->type == ePowerup_dummy) {
         return -1;
     }
+
     if (the_powerup->got_proc == NULL) {
         NewTextHeadupSlot(4, 0, 3000, -4, GetMiscString(190));
         return -1;
