@@ -138,6 +138,8 @@ void ProcessReturnToStart(tOpponent_spec* pOpponent_spec, tProcess_objective_com
 
 void ProcessLevitate(tOpponent_spec* pOpponent_spec, tProcess_objective_command pCommand);
 
+void ProcessRespawn(tOpponent_spec* pOpponent_spec, tProcess_objective_command pCommand);
+
 void ProcessGetNearPlayer(tOpponent_spec* pOpponent_spec, tProcess_objective_command pCommand);
 
 void ProcessFrozen(tOpponent_spec* pOpponent_spec, tProcess_objective_command pCommand);

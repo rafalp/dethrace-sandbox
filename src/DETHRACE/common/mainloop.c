@@ -233,6 +233,8 @@ void MungeHeadups() {
             } else {
                 sprintf(the_text, " ");
             }
+        } else if (gOpponent_respawn) {
+            sprintf(the_text, "%s \xF8%d", GetMiscString(19), gPlayer_frags);
         } else {
             oppo_count = GetCarCount(eVehicle_opponent);
             sprintf(the_text, "%s \xF8%d\xFA/%d", GetMiscString(19), oppo_count - NumberOfOpponentsLeft(), oppo_count);

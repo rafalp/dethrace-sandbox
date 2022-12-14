@@ -33,6 +33,7 @@ int gLast_credit_amount;
 tHeadup gHeadups[15];
 int gLaps_headup;
 int gCar_kill_count_headup;
+int gPlayer_frags;
 int gTimer_headup;
 int gTime_awarded_headup;
 int gPed_kill_count_headup;

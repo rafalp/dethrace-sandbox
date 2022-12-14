@@ -22,6 +22,7 @@ extern int gLast_credit_amount;
 extern tHeadup gHeadups[15];
 extern int gLaps_headup;
 extern int gCar_kill_count_headup;
+extern int gPlayer_frags;
 extern int gTimer_headup;
 extern int gTime_awarded_headup;
 extern int gPed_kill_count_headup;

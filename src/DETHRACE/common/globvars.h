@@ -30,6 +30,7 @@ extern int gEndless_mode;
 extern int gShow_peds_mode;
 extern int gShow_pups_mode;
 extern int gShow_cops_mode;
+extern int gOpponent_respawn;
 extern int gLonger_pups;
 extern int gDisable_electric_blue;
 extern int gPlayer_electro_bastard;

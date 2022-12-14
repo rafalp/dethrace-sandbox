@@ -520,12 +520,13 @@ void KnackerThisCar(tCar_spec* pCar) {
     LOG_TRACE("(%p)", pCar);
 
     pCar->knackered = 1;
+    gPlayer_frags += 1;
     QueueWastedMassage(pCar->index);
     if (!gEndless_mode) {
         CheckLastCar();
     }
     QueueOilSpill(pCar);
-    if (gNet_mode == eNet_mode_none) {
+    if (gNet_mode == eNet_mode_none && !gOpponent_respawn) {
         KillGroovadelic(pCar->index);
         KillFunkotronic(pCar->index);
     }

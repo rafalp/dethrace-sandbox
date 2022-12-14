@@ -581,6 +581,7 @@ void InitRace() {
     gTotal_laps = gCurrent_race.total_laps;
     gCheckpoint = 1;
     gCheckpoint_count = gCurrent_race.check_point_count;
+    gPlayer_frags = 0;
     gFreeze_timer = 0;
     gFree_repairs = 0;
     if (gNet_mode) {

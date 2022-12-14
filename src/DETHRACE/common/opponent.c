@@ -118,6 +118,9 @@ void ProcessCurrentObjective(tOpponent_spec* pOpponent_spec, tProcess_objective_
     case eOOT_levitate:
         ProcessLevitate(pOpponent_spec, pCommand);
         break;
+    case eOOT_respawn:
+        ProcessRespawn(pOpponent_spec, pCommand);
+        break;
     case eOOT_knackered_and_freewheeling:
         // FIXME: is keys correct?
         memset(&pOpponent_spec->car_spec->keys, 0, sizeof(pOpponent_spec->car_spec->keys));
@@ -1225,7 +1228,7 @@ void ProcessLevitate(tOpponent_spec* pOpponent_spec, tProcess_objective_command 
 
     if (pCommand == ePOC_start) {
         dr_dprintf("%s: ProcessLevitate() - new objective started", pOpponent_spec->car_spec->driver_name);
-        pOpponent_spec->levitate_data.waiting_to_levitate = 1;
+        pOpponent_spec->respawn_data.waiting_to_levitate = 1;
         pOpponent_spec->car_spec->brake_force = 15.f * pOpponent_spec->car_spec->M;
         pOpponent_spec->car_spec->acc_force = 0.f;
         pOpponent_spec->levitate_data.time_started = gTime_stamp_for_this_munging;
@@ -1263,42 +1266,51 @@ void ProcessLevitate(tOpponent_spec* pOpponent_spec, tProcess_objective_command 
 
 void ProcessRespawn(tOpponent_spec* pOpponent_spec, tProcess_objective_command pCommand) {
     float t;
-    float terminal_time;
     float y;
-    LOG_TRACE("(%p, %d)", pOpponent_spec, pCommand);
 
     if (pCommand == ePOC_start) {
-        dr_dprintf("%s: ProcessRespawn() - new objective started", pOpponent_spec->car_spec->driver_name);
-        pOpponent_spec->levitate_data.waiting_to_levitate = 1;
+        pOpponent_spec->respawn_data.waiting_to_spill_ink = 1;
+        pOpponent_spec->respawn_data.waiting_to_levitate = 1;
         pOpponent_spec->car_spec->brake_force = 15.f * pOpponent_spec->car_spec->M;
         pOpponent_spec->car_spec->acc_force = 0.f;
-        pOpponent_spec->levitate_data.time_started = gTime_stamp_for_this_munging;
+        pOpponent_spec->respawn_data.time_started = gTime_stamp_for_this_munging;
     } else if (pCommand == ePOC_run) {
-        if (pOpponent_spec->levitate_data.waiting_to_levitate) {
-            if ((BrVector3Length(&pOpponent_spec->car_spec->v) < .01f && BrVector3Length(&pOpponent_spec->car_spec->omega) < 1.f) || gTime_stamp_for_this_munging - pOpponent_spec->levitate_data.time_started > 4000) {
-                pOpponent_spec->levitate_data.waiting_to_levitate = 0;
-                pOpponent_spec->levitate_data.time_started = gTime_stamp_for_this_munging;
-                pOpponent_spec->levitate_data.initial_y = pOpponent_spec->car_spec->car_master_actor->t.t.translate.t.v[1];
+        t = (gTime_stamp_for_this_munging - pOpponent_spec->respawn_data.time_started) / 1000.f;
+        if (pOpponent_spec->respawn_data.waiting_to_spill_ink) {
+            if (t > 15.f) {
+                pOpponent_spec->respawn_data.waiting_to_spill_ink = 0;
+                pOpponent_spec->respawn_data.time_started = gTime_stamp_for_this_munging;
+            }
+        } else if (pOpponent_spec->respawn_data.waiting_to_levitate) {
+            if ((BrVector3Length(&pOpponent_spec->car_spec->v) < .01f && BrVector3Length(&pOpponent_spec->car_spec->omega) < 1.f) || gTime_stamp_for_this_munging - pOpponent_spec->respawn_data.time_started > 4000) {
+                pOpponent_spec->respawn_data.waiting_to_levitate = 0;
+                pOpponent_spec->respawn_data.time_started = gTime_stamp_for_this_munging;
+                pOpponent_spec->respawn_data.initial_y = pOpponent_spec->car_spec->car_master_actor->t.t.translate.t.v[1];
             } else {
                 pOpponent_spec->car_spec->brake_force = 15.f * pOpponent_spec->car_spec->M;
                 pOpponent_spec->car_spec->acc_force = 0.f;
                 BrVector3InvScale(&pOpponent_spec->car_spec->omega, &pOpponent_spec->car_spec->omega,
                     powf(gFrame_period_for_this_munging / 1000.f, 2.f));
             }
-        }
-        if (!pOpponent_spec->levitate_data.waiting_to_levitate) {
+        } else {
             TurnOpponentPhysicsOff(pOpponent_spec);
-            t = (gTime_stamp_for_this_munging - pOpponent_spec->levitate_data.time_started) / 1000.f;
+            t = (gTime_stamp_for_this_munging - pOpponent_spec->respawn_data.time_started) / 1000.f;
             if (t < 20.f) {
                 y = .5f * t * t / 2.f;
             } else {
                 y = 10.f * (t - 20.f) + 100.f;
             }
-            pOpponent_spec->car_spec->car_master_actor->t.t.translate.t.v[1] = pOpponent_spec->levitate_data.initial_y + y;
+            pOpponent_spec->car_spec->car_master_actor->t.t.translate.t.v[1] = pOpponent_spec->respawn_data.initial_y + y;
+
             if (y > 200.f) {
-                pOpponent_spec->finished_for_this_race = 1;
+                TeleportOpponentToNearestSafeLocation(pOpponent_spec);
+                TurnOpponentPhysicsOn(pOpponent_spec);
+                pOpponent_spec->car_spec->knackered = 0;
+                pOpponent_spec->knackeredness_detected = 0;
+                TotallyRepairACar(pOpponent_spec->car_spec);
+                NewObjective(pOpponent_spec, eOOT_complete_race);
             }
-        }
+        } 
     }
 }
 
@@ -1496,7 +1508,7 @@ void ChooseNewObjective(tOpponent_spec* pOpponent_spec, int pMust_choose_one) {
     if (gTime_stamp_for_this_munging > pOpponent_spec->next_out_of_world_check) {
         pOpponent_spec->next_out_of_world_check = gTime_stamp_for_this_munging + 500;
         if (HasCarFallenOffWorld(pOpponent_spec->car_spec)) {
-            if (pOpponent_spec->car_spec->last_time_we_touched_a_player <= gTime_stamp_for_this_munging - 7000) {
+            if (pOpponent_spec->car_spec->last_time_we_touched_a_player <= gTime_stamp_for_this_munging - 7000 || gEndless_mode || gOpponent_respawn) {
                 TeleportOpponentToNearestSafeLocation(pOpponent_spec);
                 NewObjective(pOpponent_spec, eOOT_complete_race);
             } else {
@@ -1511,10 +1523,14 @@ void ChooseNewObjective(tOpponent_spec* pOpponent_spec, int pMust_choose_one) {
     if (pOpponent_spec->car_spec->knackered && !pOpponent_spec->knackeredness_detected) {
         pOpponent_spec->knackeredness_detected = 1;
         dr_dprintf("%s: Knackered - dealing with appropriately", pOpponent_spec->car_spec->driver_name);
-        if (pOpponent_spec->car_spec->has_been_stolen) {
-            NewObjective(pOpponent_spec, eOOT_levitate);
+        if (gOpponent_respawn) {
+            NewObjective(pOpponent_spec, eOOT_respawn);
         } else {
-            NewObjective(pOpponent_spec, eOOT_knackered_and_freewheeling);
+            if (pOpponent_spec->car_spec->has_been_stolen) {
+                NewObjective(pOpponent_spec, eOOT_levitate);
+            } else {
+                NewObjective(pOpponent_spec, eOOT_knackered_and_freewheeling);
+            }
         }
         return;
     }

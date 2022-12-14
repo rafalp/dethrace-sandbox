@@ -164,7 +164,8 @@ typedef enum tOpponent_objective_type {
     eOOT_frozen = 7,
     eOOT_wait_for_some_hapless_sod = 8,
     eOOT_rematerialise = 9,
-    eOOT_return_to_start = 10
+    eOOT_return_to_start = 10,
+    eOOT_respawn = 11
 } tOpponent_objective_type;
 
 typedef enum tFollow_path_result {
@@ -1242,6 +1243,13 @@ typedef struct tLevitate_data {
     unsigned int waiting_to_levitate : 1;
 } tLevitate_data;
 
+typedef struct tRespawn_data {
+    br_scalar initial_y;
+    tU32 time_started;
+    unsigned int waiting_to_spill_ink : 1;
+    unsigned int waiting_to_levitate : 1;
+} tRespawn_data;
+
 typedef struct tRun_away_data {
     tU32 time_to_stop;
 } tRun_away_data;
@@ -1291,6 +1299,7 @@ typedef struct tOpponent_spec {                      // size: 0x190
     tFollow_path_data follow_path_data;              // @0xa8
     tPursue_car_data pursue_car_data;                // @0x100
     tLevitate_data levitate_data;                    // @0x170
+    tRespawn_data respawn_data;                    
     tRun_away_data run_away_data;                    // @0x17c
     tReturn_to_start_data return_to_start_data;      // @0x180
 } tOpponent_spec;
